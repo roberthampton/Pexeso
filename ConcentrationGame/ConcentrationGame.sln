@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcentrationGame", "ConcentrationGame\ConcentrationGame.csproj", "{98B9FC70-659D-49F2-84B5-2FD37651371E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcentrationGame", "ConcentrationGame.csproj", "{98B9FC70-659D-49F2-84B5-2FD37651371E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5EDDB8DD-572A-4944-8FA7-8DDA15066CD5}
+		SolutionGuid = {1054D7DF-A013-470A-B9CF-79ADF148175C}
 	EndGlobalSection
 EndGlobal
