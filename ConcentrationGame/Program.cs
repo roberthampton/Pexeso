@@ -16,7 +16,7 @@ namespace ConcentrationGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Concentration());
+            Application.Run(new Menu());
         }
     }
 }

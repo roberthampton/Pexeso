@@ -28,3 +28,4 @@ C:\Users\Robert\source\repos\ConcentrationGame\obj\Debug\ConcentrationGame.cspro
 C:\Users\Robert\source\repos\ConcentrationGame\obj\Debug\ConcentrationGame.csproj.CoreCompileInputs.cache
 C:\Users\Robert\source\repos\ConcentrationGame\obj\Debug\ConcentrationGame.exe
 C:\Users\Robert\source\repos\ConcentrationGame\obj\Debug\ConcentrationGame.pdb
+C:\Users\Robert\source\repos\ConcentrationGame\obj\Debug\ConcentrationGame.Menu.resources

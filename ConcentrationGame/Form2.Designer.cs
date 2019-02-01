@@ -1,6 +1,6 @@
 ﻿namespace ConcentrationGame
 {
-    partial class Menu
+    partial class Concentration
     {
         /// <summary>
         /// Required designer variable.
@@ -28,21 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // Menu
+            // timer
+            // 
+            this.timer.Interval = 750;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick_1);
+            // 
+            // Concentration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "Menu";
-            this.Text = "Menu";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Name = "Concentration";
+            this.Text = "Concentration";
+            this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer timer;
     }
 }
-
