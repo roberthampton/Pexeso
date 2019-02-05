@@ -23,12 +23,19 @@ namespace ConcentrationGame
 
             startGame.Text = "Start Game";
             startGame.Click += new EventHandler(this.StartGameEvent_Click);
-            Controls.Add(startGame);
+            startGame.Left = 300;
+            startGame.Top = 200;
+            startGame.Height = 30;
+            startGame.Width = 100;
+            startGame.BackColor = Color.Orange;
+            startGame.ForeColor = Color.Black;
+            startGame.Name = "StartButton";
+            startGame.Font = new Font("Georgia", 12);
 
             easyBox.Text = "Easy";
-            easyBox.Left = 20;
-            easyBox.Top = 20;
-            easyBox.Width = 300;
+            easyBox.Left = 300;
+            easyBox.Top = 100;
+            easyBox.Width = 100;
             easyBox.Height = 30;
             easyBox.BackColor = Color.Orange;
             easyBox.ForeColor = Color.Black;
@@ -36,15 +43,16 @@ namespace ConcentrationGame
             easyBox.Font = new Font("Georgia", 12);
 
             hardBox.Text = "Hard";
-            hardBox.Left = 100;
-            hardBox.Top = 100;
-            hardBox.Width = 300;
+            hardBox.Left = 300;
+            hardBox.Top = 150;
+            hardBox.Width = 100;
             hardBox.Height = 30;
             hardBox.BackColor = Color.Orange;
             hardBox.ForeColor = Color.Black;
             hardBox.Name = "HardCheckBox";
             hardBox.Font = new Font("Georgia", 12);
 
+            Controls.Add(startGame);
             Controls.Add(easyBox);
             Controls.Add(hardBox);
         }
@@ -55,15 +63,21 @@ namespace ConcentrationGame
             Concentration hardGame = new Concentration(6, 6);
 
             if (easyBox.Checked == true && hardBox.Checked == false)
+            {
                 easyGame.Show();
-           
-            if (hardBox.Checked == true && hardBox.Checked == false)
+                startGame.Enabled = true;
+            }
+
+            if (hardBox.Checked == true && easyBox.Checked == false)
+            {
                 hardGame.Show();
+                startGame.Enabled = true;
+            }
 
             if (hardBox.Checked == true && easyBox.Checked == true)
             {
                 startGame.Enabled = false;
-                MessageBox.Show("Please check only one box");
+                MessageBox.Show("Please check only one box.");
                 easyBox.Checked = false;
                 hardBox.Checked = false;
                 startGame.Enabled = true;
