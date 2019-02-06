@@ -39,14 +39,14 @@ namespace ConcentrationGame
         void startGameEvent_Click(object sender, EventArgs e)
         {
            
-            Concentration gameForm = new Concentration(4, 4);
+            Concentration gameForm = new Concentration(4, 4, true, 3);
             gameForm.Show();
         }
 
         void startGame2Event_Click(object sender, EventArgs e)
         {
 
-            Concentration gameForm = new Concentration(6, 6);
+            Concentration gameForm = new Concentration(6, 6, false, 1);
             gameForm.Show();
         }
 
