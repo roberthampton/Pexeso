@@ -15,6 +15,16 @@ namespace ConcentrationGame
         String[] cardCharacters = new String[18] { "O", "X", "@", "£", "~", "#", "<", ">", "1", "g", "+", "=", "_", "{", "!", "]", "*", "%"};
         Button[,] btn;
         Button firstClicked, secondClicked;
+        int diff;
+
+        //2D array that the AI uses to log seen cards so that it can guess them later in the game
+        String[,] AILog;
+
+        //variables to hold the positions of firstclicked and secondclicked so that the AI can use them to guess those positions again.
+        int firstClickedX;
+        int firstClickedY;
+        int secondClickedX;
+        int secondClickedY;
 
 
         //Int values to hold the scores for each player
@@ -28,15 +38,19 @@ namespace ConcentrationGame
         Label player1Label;
         Label player2Label;
 
-        int globalX;
-        int globalY;
+        bool singlePlayer = false;
 
-
-        public Concentration(int a, int b)
+        /*
+         * The constructor is used to create games with different settings. The first 2 ints represent the width and height of the grid of 'cards'.
+         * the bool sPlayer is used to indicate whether the game is single player or not (makes the AI play player 2s turns).
+         * the int difficulty shows the difficulty level of the game. 1 = easy. 2 = med. 3 = hard.
+         */
+        public Concentration(int a, int b, bool sPlayer, int difficulty)
         {
-             btn = new Button[a, b];
-            globalX = a;
-            globalY = b;
+            btn = new Button[a, b];
+            singlePlayer = sPlayer;
+            diff = difficulty;
+            AILog = new string[a, b];
 
             InitializeComponent();
             for (int x = 0; x < a; x++)
@@ -47,8 +61,13 @@ namespace ConcentrationGame
                     btn[x, y].SetBounds(100 * x, 100 * y, 90, 90);
                     btn[x, y].BackColor = Color.PowderBlue;
                     btn[x, y].Click += new EventHandler(this.btnEvent_Click);
+                    btn[x, y].Name = "unassigned";
                     btn[x, y].Text = "";
                     Controls.Add(btn[x, y]);
+
+                    //initialises the log 2d array
+                    AILog[x, y] = "";
+                   
                 }
             }
             assignValues();
@@ -90,32 +109,43 @@ namespace ConcentrationGame
             String p2 = Convert.ToString(player2Score);
 
             player1Label.Text = "Player 1: " + p1;
-            player2Label.Text = "Player 2: " + p2;
+
+            if (singlePlayer == false)
+            {
+                player2Label.Text = "Player 2: " + p2;
+            }
+            else
+            {
+                player2Label.Text = "CPU: " + p2;
+            }
+           
         }
 
         /**
-         * Assigns the values to the grid, using a random number to randomly allocate the characters
-         * Loops make sure all 8 characters are allocated, twice each. If the random number picks a 
-         * square that already has a value it will loop round again due to the use of the while loop.
+         * Assigns every button in the grid a number (between 0 and half the number of buttons minus 1) as a name. Each number is assigned twice, so the buttons
+         * are in numbered pairs. The names are then used later to index the arrays in which the items to be matched are held (text/images).
          * */
         private void assignValues()
         {
-            int noToAssign = (globalX * globalY) / 2;
+            int a = btn.GetLength(0);
+            int b = btn.GetLength(1);
+
+            int max = ((a * b) / 2) - 1;
+
             Random r = new Random();
-            for (int i = 0; i < noToAssign; i++)
+            for (int i = 0; i < max + 1; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
                     bool accepted = false;
                     while (!accepted)
                     {
-                        int x = r.Next(0, globalX);
-                        int y = r.Next(0, globalY);
+                        int x = r.Next(0, a);
+                        int y = r.Next(0, b);
 
-                        if (btn[x, y].Text == "")
+                        if (btn[x, y].Name == "unassigned")
                         {
-                            btn[x, y].Text = cardCharacters[i];
-                            btn[x, y].ForeColor = Color.PowderBlue;
+                            btn[x, y].Name = i.ToString();
                             accepted = true;
                         }
                     }
@@ -123,13 +153,47 @@ namespace ConcentrationGame
             }
         }
 
+        /*
+         * If the AI is on med or hard difficulty, then it will try to 'remember' guessed postitions. On med, a random number is drawn and the
+         * CPU has a 1/2 chance of 'remembering'. on hard, the CPU will always log guesses.
+         */
+        private void AILogsCards()
+        {
+            Random r = new Random();
+
+            int num = r.Next(0, 2);
+
+            if(diff == 2)
+            {
+                if(num == 1)
+                {
+                    AILog[firstClickedX, firstClickedY] = firstClicked.Name;
+                    AILog[secondClickedX, secondClickedY] = secondClicked.Name;
+                    MessageBox.Show("Saved " + firstClickedX + firstClickedY + secondClickedX + secondClickedY);
+                }
+            }
+
+            else if(diff == 3)
+            {
+                AILog[firstClickedX, firstClickedY] = firstClicked.Name;
+                AILog[secondClickedX, secondClickedY] = secondClicked.Name;
+            }
+
+        }
+
 
         //Checks the selected squares to see if they are a pair. If they are then a point is given to the current player
         //Put this into its own method as it will likely need changes later (eg comparing colours)
         private void checkForPair()
         {
+            AILogsCards();
+            firstClickedX = 0;
+            firstClickedY = 0;
+            secondClickedX = 0;
+            secondClickedY = 0;
+
             //Checks if first and second buttons clicked are same
-            if (firstClicked.Text == secondClicked.Text)
+            if ((firstClicked.Text == secondClicked.Text) && (firstClicked != secondClicked))
             {
                 firstClicked.Hide();
                 secondClicked.Hide();
@@ -139,6 +203,8 @@ namespace ConcentrationGame
                 else
                     player2Score++;
 
+                firstClicked.Text = "";
+                secondClicked.Text = "";
                 firstClicked = null;
                 secondClicked = null;
 
@@ -147,17 +213,22 @@ namespace ConcentrationGame
                 //switches to the other players turn
                 switchCurrentPlayer();
 
-                //Checks to see if 8 pairs have been found. This need to be changed later when grid is larger. 
-                // There might be a smarter way to do this by checking to see if all the boxes are hidden.
-                if ((player1Score + player2Score) == 8)
+                //Variable to hold the maximum number of pairs
+                int totalScore = (btn.GetLength(0) * btn.GetLength(1)) / 2;
+                //Checks to see if the total score is the same as the number of pairs. if so the game is over.
+                if ((player1Score + player2Score) == totalScore)
                 {
                     gameOver();
                 }
 
             }
             else
+            {
                 //If buttons aren't the same, starts timer
                 timer.Start();
+
+            }
+                
         }
 
         //Creates a message box to tell the players the result of the game. Could take user input for names and use players actual names later on.
@@ -170,7 +241,16 @@ namespace ConcentrationGame
 
             else if (player2Score > player1Score)
             {
-                MessageBox.Show("Player 2 is the winner!");
+                if(singlePlayer)
+                {
+                    MessageBox.Show("The AI is the winner!");
+
+                }
+                else
+                {
+                    MessageBox.Show("Player 2 is the winner!");
+                }
+                
             }
             else
             {
@@ -198,10 +278,140 @@ namespace ConcentrationGame
                 player1Label.ForeColor = Color.Red;
                 player2Label.ForeColor = Color.Black;
             }
+
+            if(singlePlayer && player2Active)
+            {
+                AITurn();
+            }
+        }
+
+        //Plays the AIs turn
+        private void AITurn()
+        {
+            bool accepted = false;
+
+            int a = btn.GetLength(0);
+            int b = btn.GetLength(1);
+            int arrayPos;
+
+            Random r = new Random();
+            int x;
+            int y;
+
+            if(checkLogForAPair() == true)
+            {
+                firstClicked = btn[firstClickedX, firstClickedY];
+                secondClicked = btn[secondClickedX, secondClickedY];
+                arrayPos = Convert.ToInt32(firstClicked.Name);
+                firstClicked.Text = cardCharacters[arrayPos];
+
+                arrayPos = Convert.ToInt32(secondClicked.Name);
+                secondClicked.Text = cardCharacters[arrayPos];
+            }
+            else
+            {
+                while (!accepted)
+                {
+                    x = r.Next(0, a);
+                    y = r.Next(0, b);
+
+                    firstClicked = btn[x, y];
+
+                    if (firstClicked.Visible)
+                    {
+                        accepted = true;
+                        firstClickedX = x;
+                        firstClickedY = y;
+                    }
+                }
+
+                arrayPos = Convert.ToInt32(firstClicked.Name);
+                firstClicked.Text = cardCharacters[arrayPos];
+
+                accepted = false;
+                while (!accepted)
+                {
+                    x = r.Next(0, a);
+                    y = r.Next(0, b);
+                    secondClicked = btn[x, y];
+
+                    if ((firstClicked != secondClicked) && btn[x, y].Visible)
+                    {
+                        accepted = true;
+                        secondClickedX = x;
+                        secondClickedY = y;
+                    }
+                }
+
+                arrayPos = Convert.ToInt32(secondClicked.Name);
+                secondClicked.Text = cardCharacters[arrayPos];
+            }
+            
+            checkForPair();
+
+        }
+
+        /*
+         * Checks the log for a pair. Does this by first looping through until it reaches an element which has a value and which's corresponding button
+         * is still visible. It then searches to see if it can find a match for this element. if not then it keeps going through.
+         */
+        private bool checkLogForAPair()
+        {
+            String pairValue;
+
+            for(int i = 0; i < btn.GetLength(0); i++)
+            {
+                for (int j = 0; j < btn.GetLength(1); j++)
+                {
+                    if(!(AILog[i,j].Equals("")) && btn[i, j].Visible)
+                    {
+                        pairValue = AILog[i, j];
+                        if(matchExists(pairValue))
+                        {
+                            firstClickedX = i;
+                            firstClickedY = j;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        //Checks to see if there is a match to an element in the AIs log
+        private bool matchExists(string pairValue)
+        {
+            int count = 0;
+            for (int i = 0; i < btn.GetLength(0); i++)
+            {
+                for (int j = 0; j < btn.GetLength(1); j++)
+                {
+                    if ((AILog[i, j].Equals(pairValue)) && (count == 1) && btn[i,j].Visible)
+                    {
+                        secondClickedX = i;
+                        secondClickedY = j;
+                        return true;
+                    }
+
+                    if (AILog[i, j].Equals(pairValue))
+                        count++;
+                }
+            }
+
+            return false;
         }
 
         void btnEvent_Click(object sender, EventArgs e)
         {
+            //Variable to hold the array position of the character used for the text
+            int arrayPos;
+
+            //Stops the player from playing on the AIs turn
+            if (singlePlayer && player2Active)
+                return;
+
+
             //Checks if two buttons have been clicked - makes sure player cannot click more than one button at a time
             if (firstClicked != null && secondClicked != null)
                 return;
@@ -212,24 +422,45 @@ namespace ConcentrationGame
                 return;
 
             //Checks if button has already been clicked on
-            if (buttonClicked.ForeColor == Color.Black)
+            if (buttonClicked.Text != "")
                 return;
 
             //Sets firstClicked button to button currently clicked on
             if (firstClicked == null)
             {
                 firstClicked = buttonClicked;
-                firstClicked.ForeColor = Color.Black;
+                arrayPos =  Convert.ToInt32(firstClicked.Name);
+                firstClicked.Text = cardCharacters[arrayPos];
                 return;
             }
 
             //Set secondClicked button to button currently clicked
             secondClicked = buttonClicked;
-            secondClicked.ForeColor = Color.Black;
+            arrayPos = Convert.ToInt32(secondClicked.Name);
+            secondClicked.Text = cardCharacters[arrayPos];
+
+            if(singlePlayer)
+            {
+                for (int i = 0; i < btn.GetLength(0); i++)
+                {
+                    for (int j = 0; j < btn.GetLength(1); j++)
+                    {
+                        if(firstClicked == btn[i,j])
+                        {
+                            firstClickedX = i;
+                            firstClickedY = j;
+                        }
+
+                        else if(secondClicked == btn[i, j])
+                            {
+                                secondClickedX = i;
+                                secondClickedY = j;
+                            }
+                    }
+                }
+            }
 
             checkForPair();
-
-
         }
 
         //Timer that allows player some time to look at cards before they disappear again, so player can try to memorize cards he just clicked
@@ -237,8 +468,8 @@ namespace ConcentrationGame
         {
             timer.Stop();
 
-            firstClicked.ForeColor = firstClicked.BackColor;
-            secondClicked.ForeColor = secondClicked.BackColor;
+            firstClicked.Text = "";
+            secondClicked.Text = "";
 
             firstClicked = null;
             secondClicked = null;
