@@ -1,0 +1,14 @@
+{
+  "ProjectFilePath": "/Users/caoilainnmccrory/Desktop/Semester 2/Computer Systems 2B/Pexeso-master/ConcentrationGame/ConcentrationGame.csproj",
+  "TargetFramework": "v4.6.1",
+  "TagHelpers": [],
+  "Configuration": {
+    "ConfigurationName": "UnsupportedRazor",
+    "LanguageVersion": "1.0",
+    "Extensions": [
+      {
+        "ExtensionName": "UnsupportedRazorExtension"
+      }
+    ]
+  }
+}
