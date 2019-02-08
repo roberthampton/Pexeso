@@ -30,11 +30,14 @@ namespace ConcentrationGame
         int globalX;
         int globalY;
 
-        private Concentration concentrationForm;
         private Menu menuForm;
+
+        Icon icon = new System.Drawing.Icon("memoryicon.ico");
 
         public Concentration(int a, int b)
         {
+            BackColor = Color.LightBlue;
+
             btn = new Button[a, b];
             globalX = a;
             globalY = b;
@@ -47,9 +50,9 @@ namespace ConcentrationGame
                 {
                     btn[x, y] = new Button();
                     btn[x, y].SetBounds(100 * x, 100 * y, 90, 90);
-                    btn[x, y].BackColor = Color.PowderBlue;
+                    btn[x, y].BackColor = Color.DarkRed;
                     btn[x, y].Click += new EventHandler(this.btnEvent_Click);
-                    btn[x, y].ForeColor = Color.PowderBlue;
+                    btn[x, y].ForeColor = Color.DarkRed;
                     Controls.Add(btn[x, y]);
                 }
             }
@@ -118,7 +121,7 @@ namespace ConcentrationGame
                         if (btn[x, y].Text == "")
                         {
                             btn[x, y].Text = cardCharacters[i];
-                            btn[x, y].ForeColor = Color.PowderBlue;
+                            btn[x, y].ForeColor = Color.DarkRed;
                             accepted = true;
                         }
                     }
