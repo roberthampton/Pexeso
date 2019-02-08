@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,12 +15,58 @@ namespace ConcentrationGame
     public partial class Concentration : Form
     {
         String[] cardCharacters = new String[18] { "O", "X", "@", "£", "~", "#", "<", ">", "1", "g", "+", "=", "_", "{", "!", "]", "*", "%"};
+       
         Button[,] btn;
         Button firstClicked, secondClicked;
         int diff;
 
+
+        Image cardback = Properties.Resources.cardback;
+
+        //Images for Computing Legends Mode
+        Image IainMurray = Properties.Resources.IainMurray;
+        Image BillGates = Properties.Resources.BillGates;
+        Image CharlesBabbage = Properties.Resources.CharlesBabbage;
+        Image AdaLovelace = Properties.Resources.AdaLovelace;
+        Image AlanTuring = Properties.Resources.AlanTuring;
+        Image JohnVonNeumann = Properties.Resources.JohnVonNeumann;
+        Image TimBernersLee = Properties.Resources.TimBernersLee;
+        Image SteveWozniak = Properties.Resources.SteveWozniak;
+        Image MarkZuckerberg = Properties.Resources.MarkZuckerberg;
+        Image LinusTorvalds = Properties.Resources.LinusTorvalds;
+        Image RichardStallman = Properties.Resources.RichardStallman;
+        Image ArthurCClarke = Properties.Resources.ArthurCClarke;
+        Image JamesGosling = Properties.Resources.JamesGosling;
+        Image SteveJobs = Properties.Resources.SteveJobs;
+        Image GuidoVanRossum = Properties.Resources.GuidoVanRossum;
+        Image SergeyBrin = Properties.Resources.SergeyBrin;
+        Image KenThompson= Properties.Resources.KenThompson;
+        Image NiklausWirth = Properties.Resources.NiklausWirth;
+
+        //Images for Programming Language Mode
+        Image Java = Properties.Resources.Java;
+        Image Python = Properties.Resources.Python;
+        Image Csharp = Properties.Resources.Csharp;
+        Image Cpp = Properties.Resources.Cpp;
+        Image C = Properties.Resources.C;
+        Image Ruby = Properties.Resources.Ruby;
+        Image Go = Properties.Resources.Go;
+        Image JS = Properties.Resources.JS;
+        Image PHP = Properties.Resources.PHP;
+        Image Haskell = Properties.Resources.Haskell;
+        Image Pascal = Properties.Resources.Pascal;
+        Image Kotlin = Properties.Resources.Kotlin;
+        Image Swift = Properties.Resources.Swift;
+        Image BASH = Properties.Resources.BASH;
+        Image SQL = Properties.Resources.SQL;
+        Image jQuery = Properties.Resources.jQuery;
+        Image BASIC = Properties.Resources.BASIC;
+        Image Perl = Properties.Resources.Perl;
+
+        Image[] imagesToGuess;
+        
         //2D array that the AI uses to log seen cards so that it can guess them later in the game
-        String[,] AILog;
+        String[,] AILog; 
 
         //variables to hold the positions of firstclicked and secondclicked so that the AI can use them to guess those positions again.
         int firstClickedX;
@@ -39,18 +87,37 @@ namespace ConcentrationGame
         Label player2Label;
 
         bool singlePlayer = false;
+        bool imageMode = false;
+
 
         /*
          * The constructor is used to create games with different settings. The first 2 ints represent the width and height of the grid of 'cards'.
          * the bool sPlayer is used to indicate whether the game is single player or not (makes the AI play player 2s turns).
          * the int difficulty shows the difficulty level of the game. 1 = easy. 2 = med. 3 = hard.
          */
-        public Concentration(int a, int b, bool sPlayer, int difficulty)
+        public Concentration(int a, int b, bool sPlayer, int difficulty, bool imMode, int imNum)
         {
             btn = new Button[a, b];
             singlePlayer = sPlayer;
             diff = difficulty;
+            imageMode = imMode;
+
+            this.BackColor = Color.DarkGreen;
+
             AILog = new string[a, b];
+
+            if(imNum == 1)
+            {
+                imagesToGuess = new Image[18] { IainMurray, BillGates, CharlesBabbage, AdaLovelace, AlanTuring, JohnVonNeumann, SteveWozniak,
+               LinusTorvalds, SteveJobs, KenThompson, NiklausWirth, TimBernersLee, ArthurCClarke, JamesGosling, GuidoVanRossum, SergeyBrin, RichardStallman, MarkZuckerberg };
+            }
+            else if (imNum == 2)
+            {
+                imagesToGuess = new Image[18] { Java, Python, Csharp, Cpp, C, Ruby, Go,
+               JS, PHP, Haskell, Pascal, Kotlin, Swift, BASH, SQL, jQuery, BASIC, Perl };
+
+            }
+
 
             InitializeComponent();
             for (int x = 0; x < a; x++)
@@ -58,11 +125,24 @@ namespace ConcentrationGame
                 for (int y = 0; y < b; y++)
                 {
                     btn[x, y] = new Button();
-                    btn[x, y].SetBounds(100 * x, 100 * y, 90, 90);
-                    btn[x, y].BackColor = Color.PowderBlue;
+
+                    if((a*b) > 20)
+                    {
+                        btn[x, y].SetBounds(90 * x, 120 * y, 80, 110);
+                    }
+
+                    else
+                    {
+                        btn[x, y].SetBounds(120 * x, 160 * y, 110, 150);
+                    }
+                   
+                    btn[x, y].BackColor = Color.GhostWhite;
                     btn[x, y].Click += new EventHandler(this.btnEvent_Click);
                     btn[x, y].Name = "unassigned";
                     btn[x, y].Text = "";
+                    btn[x,y].Font = new Font("Arial", 24, FontStyle.Bold);
+                    btn[x, y].Image = cardback;
+                    
                     Controls.Add(btn[x, y]);
 
                     //initialises the log 2d array
@@ -70,6 +150,7 @@ namespace ConcentrationGame
                    
                 }
             }
+            
             assignValues();
             
             //Labels which will be used to display the scores
@@ -78,22 +159,32 @@ namespace ConcentrationGame
 
             //As player one will go first, their text is made red. The current players text will be made red and the other players black so it is easy 
             //to follow who is playing at any given time.
-            player1Label.BackColor = Color.White;
-            player1Label.ForeColor = Color.Red;
+            player1Label.BackColor = Color.Green;
+            player1Label.ForeColor = Color.Gold;
 
             //Makes sure the label is in the right place/is the right size
-            player1Label.Location = new Point(400, 10);
+            if(a > 4)
+            {
+                player1Label.Location = new Point(600, 10);
+                player2Label.Location = new Point(600, 80);
+            }
+            else
+            {
+                player1Label.Location = new Point(550, 40);
+                player2Label.Location = new Point(550, 110);
+            }
+           
             player1Label.Height = 40;
-            player1Label.Width = 200;
-            player1Label.Font = new Font("Arial", 20, FontStyle.Bold);
+            player1Label.Width = 300;
+            player1Label.Font = new Font("Arial", 24, FontStyle.Bold);
 
-            player2Label.BackColor = Color.White;
-            player2Label.ForeColor = Color.Black;
-            player2Label.Font = new Font("Arial", 20, FontStyle.Bold);
+            player2Label.BackColor = Color.Green;
+            player2Label.ForeColor = Color.White;
+            player2Label.Font = new Font("Arial", 24, FontStyle.Bold);
 
-            player2Label.Location = new Point(400, 80);
+            
             player2Label.Height = 40;
-            player2Label.Width = 200;
+            player2Label.Width = 300;
 
             Controls.Add(player1Label);
             Controls.Add(player2Label);
@@ -102,6 +193,12 @@ namespace ConcentrationGame
             updateScoreLabels();
         }
 
+        private void playCardNoise()
+        {
+            SoundPlayer audio = new SoundPlayer(ConcentrationGame.Properties.Resources.cardflip); 
+            audio.Play();
+        }
+        
         //Sets the text of the labels to the scores
         private void updateScoreLabels()
         {
@@ -169,7 +266,6 @@ namespace ConcentrationGame
                 {
                     AILog[firstClickedX, firstClickedY] = firstClicked.Name;
                     AILog[secondClickedX, secondClickedY] = secondClicked.Name;
-                    MessageBox.Show("Saved " + firstClickedX + firstClickedY + secondClickedX + secondClickedY);
                 }
             }
 
@@ -184,34 +280,36 @@ namespace ConcentrationGame
 
         //Checks the selected squares to see if they are a pair. If they are then a point is given to the current player
         //Put this into its own method as it will likely need changes later (eg comparing colours)
-        private void checkForPair()
+        private async Task checkForPairAsync()
         {
             AILogsCards();
             firstClickedX = 0;
             firstClickedY = 0;
             secondClickedX = 0;
             secondClickedY = 0;
+            
+
 
             //Checks if first and second buttons clicked are same
-            if ((firstClicked.Text == secondClicked.Text) && (firstClicked != secondClicked))
+            if ((firstClicked.Name == secondClicked.Name) )
             {
-                firstClicked.Hide();
-                secondClicked.Hide();
-
+                await Task.Delay(3000);
                 if (player1Active)
+                {
                     player1Score++;
+                }
+                    
                 else
                     player2Score++;
 
-                firstClicked.Text = "";
-                secondClicked.Text = "";
+                firstClicked.Hide();
+                secondClicked.Hide();
+
                 firstClicked = null;
                 secondClicked = null;
 
                 //Makes sure whoever has got the pair will have their score incremented on the 'scoreboard'
                 updateScoreLabels();
-                //switches to the other players turn
-                switchCurrentPlayer();
 
                 //Variable to hold the maximum number of pairs
                 int totalScore = (btn.GetLength(0) * btn.GetLength(1)) / 2;
@@ -220,7 +318,12 @@ namespace ConcentrationGame
                 {
                     gameOver();
                 }
-
+                else
+                {
+                    //switches to the other players turn
+                    await switchCurrentPlayerAsync();
+                }
+                
             }
             else
             {
@@ -261,26 +364,27 @@ namespace ConcentrationGame
         }
 
         //Switches which player is currently active and playing. When a player is playing the colour of their score is red to show them its their turn.
-        private void switchCurrentPlayer()
+        private async Task switchCurrentPlayerAsync()
         {
             if (player1Active)
             {
                 player1Active = false;
                 player2Active = true;
 
-                player1Label.ForeColor = Color.Black;
-                player2Label.ForeColor = Color.Red;
+                player1Label.ForeColor = Color.White;
+                player2Label.ForeColor = Color.Gold;
             }
             else
             {
                 player1Active = true;
                 player2Active = false;
-                player1Label.ForeColor = Color.Red;
-                player2Label.ForeColor = Color.Black;
+                player1Label.ForeColor = Color.Gold;
+                player2Label.ForeColor = Color.White;
             }
 
             if(singlePlayer && player2Active)
             {
+                await Task.Delay(1500);
                 AITurn();
             }
         }
@@ -303,10 +407,26 @@ namespace ConcentrationGame
                 firstClicked = btn[firstClickedX, firstClickedY];
                 secondClicked = btn[secondClickedX, secondClickedY];
                 arrayPos = Convert.ToInt32(firstClicked.Name);
-                firstClicked.Text = cardCharacters[arrayPos];
+                if (imageMode)
+                {
+                    firstClicked.BackgroundImage = imagesToGuess[arrayPos];
+                    firstClicked.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    firstClicked.Text = cardCharacters[arrayPos];
+                }
 
                 arrayPos = Convert.ToInt32(secondClicked.Name);
-                secondClicked.Text = cardCharacters[arrayPos];
+                if (imageMode)
+                {
+                    secondClicked.BackgroundImage = imagesToGuess[arrayPos];
+                    secondClicked.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    firstClicked.Text = cardCharacters[arrayPos];
+                }
             }
             else
             {
@@ -326,7 +446,17 @@ namespace ConcentrationGame
                 }
 
                 arrayPos = Convert.ToInt32(firstClicked.Name);
-                firstClicked.Text = cardCharacters[arrayPos];
+                if (imageMode)
+                {
+                    firstClicked.BackgroundImage = imagesToGuess[arrayPos];
+                    firstClicked.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    firstClicked.Text = cardCharacters[arrayPos];
+                }
+
+                
 
                 accepted = false;
                 while (!accepted)
@@ -344,10 +474,22 @@ namespace ConcentrationGame
                 }
 
                 arrayPos = Convert.ToInt32(secondClicked.Name);
-                secondClicked.Text = cardCharacters[arrayPos];
+                if (imageMode)
+                {
+                    secondClicked.BackgroundImage = imagesToGuess[arrayPos];
+                    secondClicked.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    secondClicked.Text = cardCharacters[arrayPos];
+                }
+
+
             }
-            
-            checkForPair();
+            firstClicked.Image = null;
+            secondClicked.Image = null;
+            playCardNoise();
+            checkForPairAsync();
 
         }
 
@@ -411,8 +553,7 @@ namespace ConcentrationGame
             if (singlePlayer && player2Active)
                 return;
 
-
-            //Checks if two buttons have been clicked - makes sure player cannot click more than one button at a time
+            //Checks if two buttons have been clicked - makes sure player cannot click more than two buttons at a time
             if (firstClicked != null && secondClicked != null)
                 return;
 
@@ -430,16 +571,37 @@ namespace ConcentrationGame
             {
                 firstClicked = buttonClicked;
                 arrayPos =  Convert.ToInt32(firstClicked.Name);
-                firstClicked.Text = cardCharacters[arrayPos];
+                if(imageMode)
+                {
+                    firstClicked.BackgroundImage = imagesToGuess[arrayPos];
+                    firstClicked.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    firstClicked.Text = cardCharacters[arrayPos];
+                }
+                
+                firstClicked.Image = null;
+                playCardNoise();
                 return;
             }
 
             //Set secondClicked button to button currently clicked
             secondClicked = buttonClicked;
             arrayPos = Convert.ToInt32(secondClicked.Name);
-            secondClicked.Text = cardCharacters[arrayPos];
+            if (imageMode)
+            {
+                secondClicked.BackgroundImage = imagesToGuess[arrayPos];
+                secondClicked.BackgroundImageLayout = ImageLayout.Stretch;
+            }
+            else
+            {
+                secondClicked.Text = cardCharacters[arrayPos];
+            }
+            secondClicked.Image = null;
+            playCardNoise();
 
-            if(singlePlayer)
+            if (singlePlayer)
             {
                 for (int i = 0; i < btn.GetLength(0); i++)
                 {
@@ -460,7 +622,7 @@ namespace ConcentrationGame
                 }
             }
 
-            checkForPair();
+            checkForPairAsync();
         }
 
         //Timer that allows player some time to look at cards before they disappear again, so player can try to memorize cards he just clicked
@@ -471,12 +633,16 @@ namespace ConcentrationGame
             firstClicked.Text = "";
             secondClicked.Text = "";
 
+            firstClicked.Image = cardback;
+            secondClicked.Image = cardback;
+
             firstClicked = null;
             secondClicked = null;
 
-            switchCurrentPlayer();
-
+            switchCurrentPlayerAsync();
         }
+
+     
 
         private void Form2_Load(object sender, EventArgs e)
         {

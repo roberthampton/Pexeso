@@ -68,17 +68,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -87,6 +88,120 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cardback.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cardflip.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AdaLovelace.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AlanTuring.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArthurCClarke.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CharlesBabbage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GuidoVanRossum.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IainMurray.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JamesGosling.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JohnVonNeumann.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\KenThompson.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LinusTorvalds.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MarkZuckerberg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NiklausWirth.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RichardStallman.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SergeyBrin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SteveJobs.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SteveWozniak.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TimBernersLee.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BillGates.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BASH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BASIC.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\C#.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\C.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\C++.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Go.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Haskell.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Java.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jQuery.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Kotlin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pascal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Perl.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PHP.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Python.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ruby.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SQL.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Swift.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
