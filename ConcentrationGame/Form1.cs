@@ -22,14 +22,16 @@ namespace ConcentrationGame
         CheckBox multiPlayer = new CheckBox();
         CheckBox legends = new CheckBox();
         CheckBox logos = new CheckBox();
-        CheckBox random = new CheckBox();
+        CheckBox symbols = new CheckBox();
         PictureBox menuPic = new PictureBox();
-        //HowToPlay howTo = new HowToPlay();
+        HowToPlay howTo = new HowToPlay();
         Icon icon = new System.Drawing.Icon("memoryicon.ico");
+        int difficulty, x, y, imNum;
+        bool singleP, imMode;
 
         /*
          * Method to create main menu - includes checkboxes, buttons, and picture
-         */       
+         */
         public Menu()
         {
             InitializeComponent();
@@ -39,14 +41,6 @@ namespace ConcentrationGame
             Size = new Size(500, 900);
             // Display the form in the center of the screen.
             StartPosition = FormStartPosition.CenterScreen;
-
-            /*//Sets attributes of picture on menu
-            menuPic.Name = "Menu Image";
-            menuPic.SizeMode = PictureBoxSizeMode.StretchImage;
-            menuPic.Size = new Size(700, 80);
-            menuPic.Location = new Point(50, 30);
-            menuPic.Image = Image.FromFile("memory.png");
-            Controls.Add(menuPic);*/
 
             //Sets attributes of title
             TextBox title = new TextBox
@@ -132,24 +126,25 @@ namespace ConcentrationGame
             startGame.Name = "StartButton";
             startGame.Font = new Font("Consolas", 16);
             startGame.FlatAppearance.BorderSize = 2;
+            //startGame.FlatStyle = FlatStyle.Flat;
             Controls.Add(startGame);
 
             //Sets attributes of "How To Play" Button
             howToPlay.Text = "How To Play";
-            //howToPlay.Click += new EventHandler(this.howToPlayEvent_Click);
-            howToPlay.Left = 270;
+            howToPlay.Click += new EventHandler(this.HowToPlayEvent_Click);
+            howToPlay.Left = 275;
             howToPlay.Top = 780;
             howToPlay.Height = 50;
-            howToPlay.Width = 150;
+            howToPlay.Width = 170;
             howToPlay.BackColor = Color.DarkRed;
             howToPlay.ForeColor = Color.White;
             howToPlay.Name = "HowToButton";
             howToPlay.Font = new Font("Consolas", 16);
-            howToPlay.FlatAppearance.BorderSize = 0;
+            howToPlay.FlatAppearance.BorderSize = 2;
             Controls.Add(howToPlay);
 
             //Sets attributes of "Easy" Button
-            easyBox.Text = "    Easy";
+            easyBox.Text = "  Easy";
             easyBox.Left = 10;
             easyBox.Top = 285;
             easyBox.Width = 125;
@@ -161,7 +156,7 @@ namespace ConcentrationGame
             Controls.Add(easyBox);
 
             //Sets attributes of "Medium" Button
-            medBox.Text = "  Medium";
+            medBox.Text = " Medium";
             medBox.Left = 180;
             medBox.Top = 285;
             medBox.Width = 125;
@@ -173,8 +168,8 @@ namespace ConcentrationGame
             Controls.Add(medBox);
 
             //Sets attributes of "Hard" Button
-            hardBox.Text = "    Hard";
-            hardBox.Left = 357;
+            hardBox.Text = "  Hard";
+            hardBox.Left = 350;
             hardBox.Top = 285;
             hardBox.Width = 125;
             hardBox.Height = 30;
@@ -188,7 +183,7 @@ namespace ConcentrationGame
             sPlayer.Text = "Single-Player";
             sPlayer.Left = 50;
             sPlayer.Top = 175;
-            sPlayer.Width = 150;
+            sPlayer.Width = 165;
             sPlayer.Height = 30;
             sPlayer.BackColor = Color.Orange;
             sPlayer.ForeColor = Color.Black;
@@ -228,56 +223,86 @@ namespace ConcentrationGame
             logos.Name = "LegendsCheckBox";
             Controls.Add(logos);
 
-            //Sets attributes of "Random" CheckBox
-            random.Text = "   Random";
-            random.Left = 180;
-            random.Top = 700;
-            random.Width = 150;
-            random.Height = 30;
-            random.BackColor = Color.Orange;
-            random.ForeColor = Color.Black;
-            random.Name = "RandomCheckBox";
-            random.Font = new Font("Consolas", 14);
-            Controls.Add(random);
+            //Sets attributes of "Symbols" CheckBox
+            symbols.Text = "   Symbols";
+            symbols.Left = 180;
+            symbols.Top = 700;
+            symbols.Width = 150;
+            symbols.Height = 30;
+            symbols.BackColor = Color.Orange;
+            symbols.ForeColor = Color.Black;
+            symbols.Name = "SymbolsCheckBox";
+            symbols.Font = new Font("Consolas", 14);
+            Controls.Add(symbols);
         }
 
         void StartGameEvent_Click(object sender, EventArgs e)
-        {
-            Concentration easyGame = new Concentration(4, 4);
-            Concentration medGame = new Concentration(6, 4);
-            Concentration hardGame = new Concentration(6, 6);
+        { 
 
             if (easyBox.Checked == true && medBox.Checked == false && hardBox.Checked == false)
             {
-                easyGame.Show();
-                this.Hide();
+                x = 4;
+                y = 4;
+                difficulty = 1;
             }
-
-            if (medBox.Checked == true && easyBox.Checked == false && hardBox.Checked == false)
+            else if (medBox.Checked == true && easyBox.Checked == false && hardBox.Checked == false)
             {
-                medGame.Show();
-                this.Hide();
+                x = 6;
+                y = 4;
+                difficulty = 2;
+            }
+            else if (hardBox.Checked == true && easyBox.Checked == false && medBox.Checked == false)
+            {
+                x = 6;
+                y = 6;
+                difficulty = 3;
             }
 
-            if (hardBox.Checked == true && easyBox.Checked == false && medBox.Checked == false)
-            { 
-                hardGame.Show();
-                this.Hide();
+            if (sPlayer.Checked == true && multiPlayer.Checked == false)
+            {
+                singleP = true;
+            }
+            else if (multiPlayer.Checked == true && sPlayer.Checked == false)
+            {
+                singleP = false;
             }
 
-            if(easyBox.Checked == true && medBox.Checked == true || easyBox.Checked == true && hardBox.Checked == true || medBox.Checked == true && hardBox.Checked == true || easyBox.Checked == true && medBox.Checked == true && hardBox.Checked == true)
-            { 
+            if(legends.Checked == true && logos.Checked == false && symbols.Checked == false)
+            {
+                imMode = true;
+                imNum = 1;
+            }
+            else if(logos.Checked == true && legends.Checked == false && symbols.Checked == false)
+            {
+                imMode = true;
+                imNum = 2;
+            }
+            else if(symbols.Checked == true && legends.Checked == false && logos.Checked == false)
+            {
+                imMode = false;
+                imNum = 1;
+            }
+
+            else
+            {
                 MessageBox.Show("Please check only one box.");
                 easyBox.Checked = false;
                 medBox.Checked = false;
                 hardBox.Checked = false;
+                sPlayer.Checked = false;
+                multiPlayer.Checked = false;
+                legends.Checked = false;
+                logos.Checked = false;
+                symbols.Checked = false;
             }
+
+            Concentration game = new Concentration(x, y, singleP, difficulty, imMode, imNum);
         }
 
-        /*void howToPlayEvent_Click(object sender, EventArgs e)
+        void HowToPlayEvent_Click(object sender, EventArgs e)
         {
             howTo.Show();
-        }*/
+        } 
 
         private void Form1_Load(object sender, EventArgs e)
         {

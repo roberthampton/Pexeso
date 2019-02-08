@@ -24,10 +24,10 @@ namespace ConcentrationGame
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
-        private void rulesExplanationTextBox_TextChanged(object sender, EventArgs e)
+        private void rulesText_TextChanged(object sender, EventArgs e)
         {
 
         }

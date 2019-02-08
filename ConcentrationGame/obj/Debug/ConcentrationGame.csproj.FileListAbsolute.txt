@@ -40,3 +40,15 @@ C:/Users/Robert/source/repos/ConcentrationGame/obj/Debug/ConcentrationGame.Menu.
 /Users/caoilainnmccrory/Desktop/Semester 2/Computer Systems 2B/Pexeso-master/ConcentrationGame/obj/Debug/ConcentrationGame.csproj.CoreCompileInputs.cache
 /Users/caoilainnmccrory/Desktop/Semester 2/Computer Systems 2B/Pexeso-master/ConcentrationGame/obj/Debug/ConcentrationGame.exe
 /Users/caoilainnmccrory/Desktop/Semester 2/Computer Systems 2B/Pexeso-master/ConcentrationGame/obj/Debug/ConcentrationGame.pdb
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\bin\Debug\ConcentrationGame.exe.config
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\bin\Debug\ConcentrationGame.exe
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\bin\Debug\ConcentrationGame.pdb
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.csprojAssemblyReference.cache
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.Menu.resources
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.Concentration.resources
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.HowToPlay.resources
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.Properties.Resources.resources
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.csproj.GenerateResource.cache
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.csproj.CoreCompileInputs.cache
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.exe
+U:\Computer Systems 2B\Pexeso\Pexeso-caoilainnBranch\ConcentrationGame\obj\Debug\ConcentrationGame.pdb
